@@ -7,12 +7,12 @@ $(document).ready(function() {
     resetGame();
     mode = 4;
     
-    $("#vowel").click(function(){
-        setNextLetter(true); 
+    $("#menu_letters").click(function(){
+        setGameType(true);
     });
 
-    $("#consonant").click(function(){
-        setNextLetter(false);
+    $("#menu_numbers").click(function(){
+        setGameType(false);
     });
 
     function setNextLetter(vowel) {
@@ -41,9 +41,6 @@ $(document).ready(function() {
         letters[index] = available[number].toUpperCase();
         return letters[index];
     }
-
-    $('#start').click(startTimer);
-    $('#find-words').click(findWords);
 
     var seconds = 0;
     var timer;
@@ -96,6 +93,30 @@ $(document).ready(function() {
         
         $.ajax({url: "/api/"+word, success: function(result){
             console.log(result);
+        }, error: function (request, status, error) {
+            console.log(request.responseText);
+        }});
+    }
+
+    function setGameType(isLetters) {
+        var path = '';
+        
+        if (isLetters) {
+            path = 'letters.html';
+        } else {
+            path = 'numbers.html';
+        }
+
+        $.ajax({url: path, success: function(result){
+            $('.game-container').html(result);
+
+            if (letters) {
+                $("#vowel").click(function(){ setNextLetter(true); });
+                $("#consonant").click(function(){ setNextLetter(false); });
+                $('#start').click(startTimer);
+                $('#find-words').click(findWords);
+            }
+
         }, error: function (request, status, error) {
             console.log(request.responseText);
         }});

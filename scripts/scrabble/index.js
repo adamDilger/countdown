@@ -8,11 +8,24 @@ var ScrabbleWordFinder = function() {
 ScrabbleWordFinder.prototype.find = function(letters) {
 
   var valid = validWords(this.dict.root, letters.toLowerCase());
+  
   var longest = valid.reduce(function (a, b) { return a.length > b.length ? a : b; }).length;
 
-  return valid.filter(function(item) {
+  var output = valid.filter(function(item) {
     return item.length == longest;
-  }).join('\n');
+  });
+
+  if (output.length <= 1) {
+    output = valid.filter(function(item) {
+      return item.length >= longest - 1;
+    }).sort(function(a, b) {
+      // ASC  -> a.length - b.length
+      // DESC -> b.length - a.length
+      return b.length - a.length;
+    });
+  }
+
+  return output;
 };
 
 var validWords = function(node, letters, word = '', results = []) {
