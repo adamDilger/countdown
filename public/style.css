@@ -32,10 +32,6 @@ body {
     width:auto;
 }
 
-.game-container {
-    background-color: purple;
-}
-
 .letters {
     table-layout: fixed;
     width: 900px;
@@ -58,6 +54,26 @@ body {
     background-color: rgb(151, 161, 182);
 }
 
+.number_chooser_wrapper {
+    margin: 10 auto;
+    background-color: rgb(151, 161, 182);
+}
+
+.number_chooser_wrapper td {
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 30px;
+    text-align: center;
+    background-color: rgb(39, 70, 164);
+}
+
+.chooser_wrapper td {
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+    background-color: rgb(39, 70, 164);
+}
+
 .chooser_wrapper td {
     padding: 20px;
     font-size: 30px;
@@ -69,4 +85,10 @@ body {
     border: none;
     background-color: transparent;
     /* outline:0; */
+}
+
+.number-heading {
+    font-size: 30px;
+    text-align: center;
+    background-color: rgb(39, 70, 164);
 }

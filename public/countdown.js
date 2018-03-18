@@ -1,7 +1,7 @@
 $(document).ready(function() {
     var index;
     var mode;
-    var letters;
+    var letters, numbers;
     var animation;
     
     resetGame();
@@ -45,7 +45,25 @@ $(document).ready(function() {
     var seconds = 0;
     var timer;
 
+    function startNumbersTimer() {
+        var target = $('#target-number');
+
+        var a = setInterval(function() {
+            index++;
+
+            if (index == 10) {
+                startTimer();
+                clearInterval(a);
+            }
+
+            var number = Math.floor(Math.random() * 899) + 100;
+            console.log(number);
+            target.text(number);
+        }, 100);
+    }
+
     function startTimer() {
+        console.log("startTimer" + mode);
         if (mode == 4) return;  
         
         if (mode == 2) {
@@ -77,6 +95,7 @@ $(document).ready(function() {
     function resetGame() {
         seconds = 0;
         letters = [];
+        numbers = [];        
         index = 1;
         for (var i = 1; i <= 9; i++) {
             $('#letter' + i).text('');
@@ -104,17 +123,61 @@ $(document).ready(function() {
         if (isLetters) {
             path = 'letters.html';
         } else {
-            path = 'numbers.html';
+            path = 'numbersChooser.html';
         }
 
         $.ajax({url: path, success: function(result){
             $('.game-container').html(result);
 
-            if (letters) {
+            if (isLetters) {
                 $("#vowel").click(function(){ setNextLetter(true); });
                 $("#consonant").click(function(){ setNextLetter(false); });
-                $('#start').click(startTimer);
                 $('#find-words').click(findWords);
+                $('#start').click(startTimer);
+            } else {
+                for (let i = 1; i <= 4; i++) {
+                    $('#number' + i).click(function() {
+                        chooseBigNumbers(i);
+                    });
+                }
+
+                mode = 0;
+            }
+
+        }, error: function (request, status, error) {
+            console.log(request.responseText);
+        }});
+    }
+
+    function getNumber(big) {
+        var available = [];
+
+        if (big) {
+            available = [100, 75, 50, 25];
+        } else {
+            available = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10];
+        }
+
+        var number = Math.floor(Math.random() * available.length);
+        numbers[index] = available[number];
+        return numbers[index];
+    }
+
+    function chooseBigNumbers(amount) {
+        console.log('chooseBigNumbers');
+        var path = 'numbers.html';
+        $.ajax({url: path, success: function(result){
+            $('.game-container').html(result);
+            $('#start').click(startNumbersTimer);
+
+            for (let i = 1; i <= amount; i++) {
+                var num = getNumber(true);
+                $('#number' + i).text(num);
+            }
+
+            for (let i = amount + 1; i <= 6; i++) {
+                var num = getNumber(false);
+                $('#number' + i).text(num);
             }
 
         }, error: function (request, status, error) {
