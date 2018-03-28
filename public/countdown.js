@@ -3,8 +3,8 @@ $(document).ready(function() {
     var mode;
     var letters, numbers;
     var animation;
-    
-    resetGame();
+
+    initGame();
     mode = 4;
     
     $("#menu_letters").click(function(){
@@ -40,6 +40,24 @@ $(document).ready(function() {
         var number = Math.floor(Math.random() * available.length);
         letters[index] = available[number].toUpperCase();
         return letters[index];
+    }
+    
+    function initGame() {
+        seconds = 0;
+        letters = [];
+        numbers = [];        
+        index = 1;
+
+        $('.clock')
+            .css('padding-top', 100)
+            .css('opacity', 0);
+
+        $('.game-container')
+            .css('padding-top', 100)
+            .css('opacity', 0);
+
+        TweenLite.to($('.clock'), 1, { padding: 20, opacity: 1, ease: Power1.easeOut}).delay(0.2);
+        TweenLite.to($('.game-container'), 1, { padding: 20, opacity: 1, ease: Power1.easeOut}).delay(0.2);
     }
 
     var seconds = 0;
